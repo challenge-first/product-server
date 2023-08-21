@@ -1,24 +1,22 @@
 package com.maybezone.productservice.domain.product.dto.response;
 
-import com.maybezone.productservice.domain.product.productenum.ProductState;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PROTECTED;
+import com.maybezone.productservice.domain.product.productenum.ProductState;
+import lombok.*;
+
+import static lombok.AccessLevel.*;
 
 @Getter
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
-public class ResponseProductDto {
+public class ResponseProductDetailDto {
 
-    private Long id;
     private String name;
     private Long price;
+    private Long stockCount;
     private ProductState productState;
-    private Long likeCount;
     private String imageUrl;
+    private Long likeCount;
 
 }
