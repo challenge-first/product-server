@@ -7,6 +7,8 @@ import com.maybezone.productservice.domain.product.productenum.SubCategory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -21,13 +23,13 @@ public class ProductQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Product> searchProducts(
+    public Page<Product> searchProducts(
             List<MainCategory> mainCategories,
             List<SubCategory> subCategories,
             String searchWord,
             Pageable pageable
     ) {
-        return queryFactory
+        List<Product> products = queryFactory
                 .selectFrom(product)
                 .where(
                         equalMainCategory(mainCategories),
@@ -37,6 +39,9 @@ public class ProductQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        return new PageImpl<>(products, pageable, products.size());
+
     }
 
     private BooleanExpression equalMainCategory(List<MainCategory> mainCategories) {
@@ -60,7 +65,7 @@ public class ProductQueryRepository {
             return null;
         }
 
-        return product.name.like("%" +searchWord + "%");
+        return product.name.like("%" + searchWord + "%");
     }
 
 }
