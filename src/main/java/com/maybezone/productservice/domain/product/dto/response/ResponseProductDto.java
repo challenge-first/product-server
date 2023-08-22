@@ -19,6 +19,6 @@ public class ResponseProductDto {
     private Long price;
     private ProductState productState;
     private Long likeCount;
-    private String imageUrl;
+    private String image;
 
 }

@@ -1,5 +1,6 @@
 package com.maybezone.productservice.domain.product.mapper;
 
+import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
 import com.maybezone.productservice.domain.product.entity.Product;
 import org.mapstruct.Mapper;
@@ -11,5 +12,7 @@ public interface ProductMapper {
     ProductMapper PRODUCT_INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     ResponseProductDto entityToResponseProductDto(Product product);
+
+    ResponseProductDetailDto entityToResponseProductDetailDto(Product product);
 
 }

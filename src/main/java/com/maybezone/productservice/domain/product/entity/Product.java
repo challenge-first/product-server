@@ -34,7 +34,7 @@ public class Product {
     private Long price;
 
     @Column(nullable = false)
-    private String imageUrl;
+    private String image;
 
     @Column(nullable = false)
     private Long stockCount;
