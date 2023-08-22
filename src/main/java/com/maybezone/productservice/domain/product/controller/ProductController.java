@@ -6,6 +6,7 @@ import com.maybezone.productservice.domain.product.dto.response.ResponseProductD
 import com.maybezone.productservice.domain.product.entity.Product;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +21,20 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/main")
-    public ResponseEntity<ResponseDataDto<List<ResponseProductDto>>> getMainPageProducts(Pageable pageable) {
-        List<ResponseProductDto> responseProductDtos = productService.getMainPageProducts(pageable);
-        ResponseDataDto<List<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(responseProductDtos);
+    public ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getMainPageProducts(Pageable pageable) {
+        Page<ResponseProductDto> responseProductDtos = productService.getMainPageProducts(pageable);
+        ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(responseProductDtos);
 
         return ResponseEntity.ok(responseDataDto);
     }
 
     @GetMapping
-    ResponseEntity<ResponseDataDto<List<ResponseProductDto>>> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
+    ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
                                                                               @RequestParam(name = "subcategory", required = false) List<String> subCategories,
                                                                               @RequestParam(name = "searchword", required = false) String searchWord,
                                                                               Pageable pageable) {
-        List<ResponseProductDto> searchResult = productService.getSearchResult(mainCategories, subCategories, searchWord, pageable);
-        ResponseDataDto<List<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(searchResult);
+        Page<ResponseProductDto> searchResult = productService.getSearchResult(mainCategories, subCategories, searchWord, pageable);
+        ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(searchResult);
 
         return ResponseEntity.ok(responseDataDto);
     }

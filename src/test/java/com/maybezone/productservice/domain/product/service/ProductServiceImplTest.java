@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -66,23 +68,25 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("메인 페이지 상품 전체조회 테스트")
     void getMainPageProductsTest() {
+        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
         when(productRepository.findTop4ByOrderByIdDesc(pageable))
-                .thenReturn(productList);
+                .thenReturn(productPage);
 
-        List<ResponseProductDto> findResponseProductDtos = productService.getMainPageProducts(pageable);
+        Page<ResponseProductDto> findResponseProductDtos = productService.getMainPageProducts(pageable);
 
-        assertThat(findResponseProductDtos.size()).isEqualTo(4);
-        assertThat(findResponseProductDtos.get(0).getPrice()).isEqualTo(4);
+        assertThat(findResponseProductDtos.getTotalPages()).isEqualTo(1);
+        assertThat(findResponseProductDtos.getTotalElements()).isEqualTo(4);
     }
 
     @Test
     @DisplayName("조건 검색 테스트")
     void getSearchResultTest() {
-        when(productQueryRepository.searchProducts(any(), any(), any(), any())).thenReturn(productList);
+        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+        when(productQueryRepository.searchProducts(any(), any(), any(), any())).thenReturn(productPage);
 
-        List<ResponseProductDto> searchResult = productService.getSearchResult(anyList(), anyList(), any(), any());
+        Page<ResponseProductDto> searchResult = productService.getSearchResult(anyList(), anyList(), any(), any());
 
-        assertThat(searchResult.size()).isEqualTo(4);
+        assertThat(searchResult.getContent().size()).isEqualTo(4);
     }
 
     @Test

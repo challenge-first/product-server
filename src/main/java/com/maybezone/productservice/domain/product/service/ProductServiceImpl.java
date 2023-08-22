@@ -8,6 +8,7 @@ import com.maybezone.productservice.domain.product.productenum.SubCategory;
 import com.maybezone.productservice.domain.product.repository.ProductQueryRepository;
 import com.maybezone.productservice.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +26,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductQueryRepository productQueryRepository;
 
     @Override
-    public List<ResponseProductDto> getMainPageProducts(Pageable pageable) {
-        List<Product> findProducts = productRepository.findTop4ByOrderByIdDesc(pageable);
+    public Page<ResponseProductDto> getMainPageProducts(Pageable pageable) {
+        Page<Product> findProducts = productRepository.findTop4ByOrderByIdDesc(pageable);
 
-        return findProducts.stream()
-                .map(PRODUCT_INSTANCE::entityToResponseProductDto)
-                .toList();
+        return findProducts
+                .map(PRODUCT_INSTANCE::entityToResponseProductDto);
     }
 
     @Override
-    public List<ResponseProductDto> getSearchResult(List<String> mainCategories, List<String> subCategories, String searchWord, Pageable pageable) {
+    public Page<ResponseProductDto> getSearchResult(List<String> mainCategories, List<String> subCategories, String searchWord, Pageable pageable) {
         List<MainCategory> enumMainCategories = new ArrayList<>();
         List<SubCategory> enumSubCategories = new ArrayList<>();
 
@@ -52,11 +52,10 @@ public class ProductServiceImpl implements ProductService {
             });
         }
 
-        List<Product> findProducts = productQueryRepository.searchProducts(enumMainCategories, enumSubCategories, searchWord, pageable);
+        Page<Product> findProducts = productQueryRepository.searchProducts(enumMainCategories, enumSubCategories, searchWord, pageable);
 
-        return findProducts.stream()
-                .map(PRODUCT_INSTANCE::entityToResponseProductDto)
-                .toList();
+        return findProducts
+                .map(PRODUCT_INSTANCE::entityToResponseProductDto);
     }
 
     private static boolean isNotEmptyList(List<String> mainCategories) {

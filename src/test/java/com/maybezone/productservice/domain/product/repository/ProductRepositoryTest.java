@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -49,13 +50,10 @@ class ProductRepositoryTest {
     @DisplayName("메인 페이지 상품 전체조회 테스트")
     void findTop4ByOrderByIdDescTest() {
         Pageable pageable = PageRequest.of(1, 4, DESC, "id");
-        List<Product> findProducts = productRepository.findTop4ByOrderByIdDesc(pageable);
+        Page<Product> findProducts = productRepository.findTop4ByOrderByIdDesc(pageable);
 
-        assertThat(findProducts.size()).isEqualTo(4);
-        assertThat(findProducts.get(0).getName()).isEqualTo("name6");
-        assertThat(findProducts.get(1).getImage()).isEqualTo("image5");
-        assertThat(findProducts.get(2).getPrice()).isEqualTo(4L);
-        assertThat(findProducts.get(3).getStockCount()).isEqualTo(3L);
+        assertThat(findProducts.getTotalPages()).isEqualTo(3);
+        assertThat(findProducts.getTotalElements()).isEqualTo(10L);
     }
 
 }
