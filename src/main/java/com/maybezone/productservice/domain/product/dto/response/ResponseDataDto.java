@@ -10,7 +10,7 @@ import static lombok.AccessLevel.*;
 @Getter
 @Builder
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 public class ResponseDataDto<T> {
 
     private T data;

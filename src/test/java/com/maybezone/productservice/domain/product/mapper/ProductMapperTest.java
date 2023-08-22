@@ -19,7 +19,7 @@ class ProductMapperTest {
                 .id(1L)
                 .name("name")
                 .price(100L)
-                .imageUrl("www.image.com")
+                .image("www.image.com")
                 .likeCount(0L)
                 .productState(IN_STOCK)
                 .build();
@@ -29,7 +29,7 @@ class ProductMapperTest {
         assertThat(responseProductDto.getId()).isEqualTo(1L);
         assertThat(responseProductDto.getName()).isEqualTo("name");
         assertThat(responseProductDto.getPrice()).isEqualTo(100L);
-        assertThat(responseProductDto.getImageUrl()).isEqualTo("www.image.com");
+        assertThat(responseProductDto.getImage()).isEqualTo("www.image.com");
         assertThat(responseProductDto.getLikeCount()).isEqualTo(0L);
         assertThat(responseProductDto.getProductState()).isEqualTo(IN_STOCK);
     }
