@@ -3,15 +3,17 @@ package com.maybezone.productservice.domain.product.controller;
 import com.maybezone.productservice.domain.product.dto.response.ResponseDataDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
-import com.maybezone.productservice.domain.product.entity.Product;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class ProductController {
     ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
                                                                               @RequestParam(name = "subcategory", required = false) List<String> subCategories,
                                                                               @RequestParam(name = "searchword", required = false) String searchWord,
-                                                                              Pageable pageable) {
+                                                                              @PageableDefault(sort = "id", direction = DESC, size = 4) Pageable pageable) {
         Page<ResponseProductDto> searchResult = productService.getSearchResult(mainCategories, subCategories, searchWord, pageable);
         ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(searchResult);
 

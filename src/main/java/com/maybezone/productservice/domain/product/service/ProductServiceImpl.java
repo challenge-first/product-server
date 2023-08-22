@@ -58,8 +58,8 @@ public class ProductServiceImpl implements ProductService {
                 .map(PRODUCT_INSTANCE::entityToResponseProductDto);
     }
 
-    private static boolean isNotEmptyList(List<String> mainCategories) {
-        return !mainCategories.isEmpty();
+    private boolean isNotEmptyList(List<String> categories) {
+        return categories != null && !categories.isEmpty();
     }
 
     private MainCategory getEnumMainCategory(String mainCategory) {
