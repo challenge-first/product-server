@@ -21,7 +21,6 @@ public class StockEventConsumer {
     @Transactional
     @KafkaListener(topics = "${kafka.topic.bid}", containerFactory = "stockKafkaListenerContainerFactory")
     public void listener(String message) throws JsonProcessingException {
-        log.info("BidEventConsumer running!");
         log.info("message = {}", message);
         RequestStockDto requestStockDto = objectMapper.readValue(message, RequestStockDto.class);
         log.info("requestBidDto = {}, {}", requestStockDto.getProductId());
