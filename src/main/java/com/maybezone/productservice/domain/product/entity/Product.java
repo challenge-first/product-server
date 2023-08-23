@@ -58,4 +58,7 @@ public class Product {
     @Column(nullable = false)
     private SubCategory subCategory;
 
+    public Long updateStockCount() {
+        return this.stockCount--;
+    }
 }

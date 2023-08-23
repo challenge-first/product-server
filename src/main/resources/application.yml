@@ -25,3 +25,8 @@ server:
   servlet:
     encoding:
       force: true
+
+kafka:
+  topic:
+    stock: stock-topic
+  address: localhost:9092
