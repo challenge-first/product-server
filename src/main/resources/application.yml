@@ -1,13 +1,15 @@
 spring:
+  application:
+    name: product-server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/auction
+    username: root
+    password: Michew0724!
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -22,6 +24,7 @@ logging:
     org.hibernate.SQL: debug
 
 server:
+  port: 8012
   servlet:
     encoding:
       force: true
@@ -30,3 +33,13 @@ kafka:
   topic:
     stock: stock-topic
   address: localhost:9092
+
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
