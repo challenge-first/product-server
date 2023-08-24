@@ -89,8 +89,6 @@ public class ProductServiceImpl implements ProductService {
     public void updateStockCount(Long productId) {
         Product findProduct = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
 
-        if (findProduct.updateStockCount() < 0) {
-            throw new IllegalStateException("상품의 재고가 부족합니다");
-        }
+        findProduct.updateStockCount();
     }
 }
