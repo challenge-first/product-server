@@ -58,4 +58,12 @@ public class Product {
     @Column(nullable = false)
     private SubCategory subCategory;
 
+    public Long updateStockCount() {
+
+        if (stockCount <= 0) {
+            throw new IllegalStateException("상품의 재고가 부족합니다");
+        }
+
+        return this.stockCount--;
+    }
 }

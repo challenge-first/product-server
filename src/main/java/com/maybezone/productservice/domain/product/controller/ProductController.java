@@ -3,8 +3,10 @@ package com.maybezone.productservice.domain.product.controller;
 import com.maybezone.productservice.domain.product.dto.response.ResponseDataDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
+import com.maybezone.productservice.domain.product.dto.response.ResponseStockDto;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -49,4 +51,12 @@ public class ProductController {
         return ResponseEntity.ok(responseDataDto);
     }
 
+    @GetMapping("/stock/{productId}")
+    public ResponseEntity<ResponseStockDto> getStock(@PathVariable Long productId) {
+        ResponseStockDto responseStockDto = ResponseStockDto.builder()
+                .stockCount(productService.getDetailProduct(productId).getStockCount())
+                .build();
+
+        return ResponseEntity.ok(responseStockDto);
+    }
 }

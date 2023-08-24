@@ -15,4 +15,6 @@ public interface ProductService {
 
     ResponseProductDetailDto getDetailProduct(Long productId);
 
+    void updateStockCount(Long ProductId);
+
 }
