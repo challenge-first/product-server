@@ -36,7 +36,10 @@ jobs:
         run: docker-compose build
 
       - name: DockerHub Push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+        run: docker push product-service-springboot
+
+      - name: DockerHub Push sql
+        run: docker push mysql
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@master
@@ -52,7 +55,8 @@ jobs:
             sudo docker kill ${{ secrets.PROJECT_NAME }}
             sudo docker rm -f ${{ secrets.PROJECT_NAME }}
             sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+            sudo docker pull product-service-springboot
+            sudo docker pull mysql
             
             sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
             --name ${{ secrets.PROJECT_NAME }} \
