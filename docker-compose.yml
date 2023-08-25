@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    image: mysql
+    image: princetons/mysql
     container_name: product-data
     restart: always
     ports:
@@ -16,7 +16,7 @@ services:
       - ./db/data:/var/lib/mysql
 
   springboot:
-    image: product-service-springboot
+    image: princetons/product-service-springboot
     build: .
     container_name: product-service
     ports:
