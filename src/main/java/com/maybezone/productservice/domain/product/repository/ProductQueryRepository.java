@@ -1,7 +1,6 @@
 package com.maybezone.productservice.domain.product.repository;
 
 import com.maybezone.productservice.domain.product.entity.Product;
-import com.maybezone.productservice.domain.product.entity.QProduct;
 import com.maybezone.productservice.domain.product.productenum.MainCategory;
 import com.maybezone.productservice.domain.product.productenum.SubCategory;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -9,11 +8,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -38,6 +35,7 @@ public class ProductQueryRepository {
                         equalSubCategory(subCategories),
                         equalSearchWord(searchWord)
                 )
+                .orderBy(product.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
