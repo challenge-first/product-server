@@ -82,10 +82,10 @@ class ProductQueryRepositoryTest {
         Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
 
         assertThat(products.getContent().size()).isEqualTo(4);
-        assertThat(products.getContent().get(0).getMainCategory()).isEqualTo(MENS_SHOES);
-        assertThat(products.getContent().get(1).getMainCategory()).isEqualTo(ACCESSORIES);
-        assertThat(products.getContent().get(2).getMainCategory()).isEqualTo(MENS_SHOES);
-        assertThat(products.getContent().get(3).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.getContent().get(0).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.getContent().get(1).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.getContent().get(2).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.getContent().get(3).getMainCategory()).isEqualTo(MENS_SHOES);
     }
 
     @Test
