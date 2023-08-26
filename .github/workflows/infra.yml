@@ -55,4 +55,7 @@ jobs:
             
             sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
             --name ${{ secrets.PROJECT_NAME }} \
+            -e DB_URL=${{ DB_URL }} \
+            -e DB_PASSWORD=${{ DB_PASSWORD }} \
+            -e DB_USERNAME=${{ DB_USERNAME }}
             -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
