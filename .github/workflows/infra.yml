@@ -54,4 +54,4 @@ jobs:
             sudo docker pull princetons/product-service-springboot
             sudo docker pull princetons/mysql
             
-            sudo docker-compose up
+            sudo docker-compose up -d
