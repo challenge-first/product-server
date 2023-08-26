@@ -57,5 +57,5 @@ jobs:
             --name ${{ secrets.PROJECT_NAME }} \
             -e DB_URL=${{ secrets.DB_URL }} \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e DB_USERNAME=${{ secrets.DB_USERNAME }}
+            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
