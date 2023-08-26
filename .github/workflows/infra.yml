@@ -50,8 +50,6 @@ jobs:
 
             sudo docker-compose down
             sudo docker rmi princetons/product-service-springboot
-            sudo docker rmi princetons/mysql
             sudo docker pull princetons/product-service-springboot
-            sudo docker pull mysql
             
             sudo docker-compose up -d
