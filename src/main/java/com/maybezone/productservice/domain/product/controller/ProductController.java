@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.*;
 
-@CrossOrigin("http://127.0.0.1:5500")
+//@CrossOrigin("http://127.0.0.1:5500")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
