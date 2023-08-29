@@ -1,6 +1,5 @@
 server:
-  port:
-    port: ${PORT}
+  port: ${PORT}
   servlet:
     encoding:
       force: true
