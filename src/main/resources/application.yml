@@ -1,9 +1,9 @@
 server:
+  port:
+    port: ${PORT}
   servlet:
     encoding:
       force: true
-  port:
-    port: ${PORT}
 
 spring:
   application:
