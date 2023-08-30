@@ -2,6 +2,7 @@ package com.maybezone.productservice.domain.product.service;
 
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
+import com.maybezone.productservice.domain.product.dto.response.ResponseProductPageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,9 +10,9 @@ import java.util.List;
 
 public interface ProductService {
 
-    Page<ResponseProductDto> getMainPageProducts(Pageable pageable);
+    ResponseProductPageDto getNoOffsetMainPageProducts(Long productId);
 
-    Page<ResponseProductDto> getSearchResult(List<String> mainCategory, List<String> subCategory, String searchWord, Pageable pageable);
+    ResponseProductPageDto getSearchResult(List<String> mainCategory, List<String> subCategory, String searchWord, Long productId);
 
     ResponseProductDetailDto getDetailProduct(Long productId);
 

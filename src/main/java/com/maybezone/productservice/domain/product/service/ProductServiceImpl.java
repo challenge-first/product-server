@@ -2,6 +2,7 @@ package com.maybezone.productservice.domain.product.service;
 
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
+import com.maybezone.productservice.domain.product.dto.response.ResponseProductPageDto;
 import com.maybezone.productservice.domain.product.entity.Product;
 import com.maybezone.productservice.domain.product.productenum.MainCategory;
 import com.maybezone.productservice.domain.product.productenum.SubCategory;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.maybezone.productservice.domain.product.mapper.ProductMapper.*;
 
@@ -26,15 +26,21 @@ public class ProductServiceImpl implements ProductService {
     private final ProductQueryRepository productQueryRepository;
 
     @Override
-    public Page<ResponseProductDto> getMainPageProducts(Pageable pageable) {
-        Page<Product> findProducts = productRepository.findTop4ByOrderByIdDesc(pageable);
+    public ResponseProductPageDto getNoOffsetMainPageProducts(Long productId) {
+        List<ResponseProductDto> findProductDtos = productQueryRepository.findNoOffsetPageById(productId)
+                .stream()
+                .map(PRODUCT_INSTANCE::entityToResponseProductDto)
+                .toList();
+        Long lastProductId = getLastProductId(findProductDtos);
 
-        return findProducts
-                .map(PRODUCT_INSTANCE::entityToResponseProductDto);
+        return ResponseProductPageDto.builder()
+                .data(findProductDtos)
+                .lastProductId(lastProductId)
+                .build();
     }
 
     @Override
-    public Page<ResponseProductDto> getSearchResult(List<String> mainCategories, List<String> subCategories, String searchWord, Pageable pageable) {
+    public ResponseProductPageDto getSearchResult(List<String> mainCategories, List<String> subCategories, String searchWord, Long productId) {
         List<MainCategory> enumMainCategories = new ArrayList<>();
         List<SubCategory> enumSubCategories = new ArrayList<>();
 
@@ -52,10 +58,24 @@ public class ProductServiceImpl implements ProductService {
             });
         }
 
-        Page<Product> findProducts = productQueryRepository.searchProducts(enumMainCategories, enumSubCategories, searchWord, pageable);
+        List<ResponseProductDto> findProductDtos = productQueryRepository.searchProducts(enumMainCategories, enumSubCategories, searchWord, productId)
+                .stream()
+                .map(PRODUCT_INSTANCE::entityToResponseProductDto)
+                .toList();
+        Long lastProductId = getLastProductId(findProductDtos);
 
-        return findProducts
-                .map(PRODUCT_INSTANCE::entityToResponseProductDto);
+        return ResponseProductPageDto.builder()
+                .data(findProductDtos)
+                .lastProductId(lastProductId)
+                .build();
+    }
+
+    private Long getLastProductId(List<ResponseProductDto> productDtos) {
+        if (productDtos.isEmpty()) {
+            return 0L;
+        }
+
+        return productDtos.get(productDtos.size() - 1).getId();
     }
 
     private boolean isNotEmptyList(List<String> categories) {

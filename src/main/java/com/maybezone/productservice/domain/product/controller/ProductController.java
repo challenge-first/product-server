@@ -1,11 +1,9 @@
 package com.maybezone.productservice.domain.product.controller;
 
-import com.maybezone.productservice.domain.product.dto.response.ResponseDataDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseStockDto;
+import com.maybezone.productservice.domain.product.dto.response.*;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +15,7 @@ import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.*;
 
+@Slf4j
 @CrossOrigin("http://127.0.0.1:5500")
 @RestController
 @RequiredArgsConstructor
@@ -26,22 +25,24 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/main")
-    public ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getMainPageProducts(Pageable pageable) {
-        Page<ResponseProductDto> responseProductDtos = productService.getMainPageProducts(pageable);
-        ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(responseProductDtos);
+    public ResponseEntity<ResponseProductPageDto> getNoOffsetMainPageProducts(@RequestParam(name = "lastproductid", required = false) Long productId) {
+        long startTime = System.currentTimeMillis();
+        ResponseProductPageDto responseProductPageDto = productService.getNoOffsetMainPageProducts(productId);
+        log.info("query time={}s", (double) (System.currentTimeMillis() - startTime)/1000);
 
-        return ResponseEntity.ok(responseDataDto);
+        return ResponseEntity.ok(responseProductPageDto);
     }
 
     @GetMapping
-    ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
+    ResponseEntity<ResponseProductPageDto> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
                                                                               @RequestParam(name = "subcategory", required = false) List<String> subCategories,
                                                                               @RequestParam(name = "searchword", required = false) String searchWord,
-                                                                              @PageableDefault(sort = "id", direction = DESC, size = 4) Pageable pageable) {
-        Page<ResponseProductDto> searchResult = productService.getSearchResult(mainCategories, subCategories, searchWord, pageable);
-        ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(searchResult);
+                                                                              @RequestParam(name = "lastproductid", required = false) Long productId) {
+        long startTime = System.currentTimeMillis();
+        ResponseProductPageDto responseProductPageDto = productService.getSearchResult(mainCategories, subCategories, searchWord, productId);
+        log.info("query time={}s", (double) (System.currentTimeMillis() - startTime) / 1000);
 
-        return ResponseEntity.ok(responseDataDto);
+        return ResponseEntity.ok(responseProductPageDto);
     }
 
     @GetMapping("/{productId}")

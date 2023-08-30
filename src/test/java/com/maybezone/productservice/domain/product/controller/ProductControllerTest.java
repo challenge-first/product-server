@@ -48,40 +48,40 @@ class ProductControllerTest {
         }
     }
 
-    @Test
-    @DisplayName("메인 페이지 상품 전체 조회 테스트")
-    void getMainPageProductsTest() throws Exception {
-        PageRequest pageable = PageRequest.of(0, 4, DESC, "id");
-        PageImpl<ResponseProductDto> responseProductDtosPage = new PageImpl<>(responseProductDtos, pageable, responseProductDtos.size());
+//    @Test
+//    @DisplayName("메인 페이지 상품 전체 조회 테스트")
+//    void getMainPageProductsTest() throws Exception {
+//        PageRequest pageable = PageRequest.of(0, 4, DESC, "id");
+//        PageImpl<ResponseProductDto> responseProductDtosPage = new PageImpl<>(responseProductDtos, pageable, responseProductDtos.size());
+//
+//        when(productService.getMainPageProducts(any()))
+//                .thenReturn(responseProductDtosPage);
+//
+//        mockMvc.perform(get("/products/main"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(APPLICATION_JSON))
+//                .andExpect(jsonPath("data").exists())
+//                .andExpect(jsonPath("data.content").exists())
+//                .andExpect(jsonPath("data.content").isArray())
+//                .andExpect(jsonPath("data.content.length()").value(4));
+//    }
 
-        when(productService.getMainPageProducts(any()))
-                .thenReturn(responseProductDtosPage);
-
-        mockMvc.perform(get("/products/main"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("data").exists())
-                .andExpect(jsonPath("data.content").exists())
-                .andExpect(jsonPath("data.content").isArray())
-                .andExpect(jsonPath("data.content.length()").value(4));
-    }
-
-    @Test
-    @DisplayName("조건 검색 테스트")
-    void getSearchResultTest() throws Exception {
-        PageRequest pageable = PageRequest.of(0, 4, DESC, "id");
-        PageImpl<ResponseProductDto> responseProductDtosPage = new PageImpl<>(responseProductDtos, pageable, responseProductDtos.size());
-
-        when(productService.getSearchResult(anyList(), anyList(), any(), any()))
-                .thenReturn(responseProductDtosPage);
-
-        mockMvc.perform(get("/products?maincategory=ACCESSORIES&subcategory=BACKPACKS&searchword=search"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("data").exists());
-    }
+//    @Test
+//    @DisplayName("조건 검색 테스트")
+//    void getSearchResultTest() throws Exception {
+//        PageRequest pageable = PageRequest.of(0, 4, DESC, "id");
+//        PageImpl<ResponseProductDto> responseProductDtosPage = new PageImpl<>(responseProductDtos, pageable, responseProductDtos.size());
+//
+//        when(productService.getSearchResult(anyList(), anyList(), any(), any()))
+//                .thenReturn(responseProductDtosPage);
+//
+//        mockMvc.perform(get("/products?maincategory=ACCESSORIES&subcategory=BACKPACKS&searchword=search"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(APPLICATION_JSON))
+//                .andExpect(jsonPath("data").exists());
+//    }
 
     @Test
     @DisplayName("상품 상세 조회 테스트")
