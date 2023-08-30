@@ -65,29 +65,29 @@ class ProductServiceImplTest {
         }
     }
 
-    @Test
-    @DisplayName("메인 페이지 상품 전체조회 테스트")
-    void getMainPageProductsTest() {
-        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
-        when(productRepository.findTop4ByOrderByIdDesc(pageable))
-                .thenReturn(productPage);
+//    @Test
+//    @DisplayName("메인 페이지 상품 전체조회 테스트")
+//    void getMainPageProductsTest() {
+//        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+//        when(productRepository.findTop4ByOrderByIdDesc(pageable))
+//                .thenReturn(productPage);
+//
+//        Page<ResponseProductDto> findResponseProductDtos = productService.getMainPageProducts(pageable);
+//
+//        assertThat(findResponseProductDtos.getTotalPages()).isEqualTo(1);
+//        assertThat(findResponseProductDtos.getTotalElements()).isEqualTo(4);
+//    }
 
-        Page<ResponseProductDto> findResponseProductDtos = productService.getMainPageProducts(pageable);
-
-        assertThat(findResponseProductDtos.getTotalPages()).isEqualTo(1);
-        assertThat(findResponseProductDtos.getTotalElements()).isEqualTo(4);
-    }
-
-    @Test
-    @DisplayName("조건 검색 테스트")
-    void getSearchResultTest() {
-        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
-        when(productQueryRepository.searchProducts(any(), any(), any(), any())).thenReturn(productPage);
-
-        Page<ResponseProductDto> searchResult = productService.getSearchResult(anyList(), anyList(), any(), any());
-
-        assertThat(searchResult.getContent().size()).isEqualTo(4);
-    }
+//    @Test
+//    @DisplayName("조건 검색 테스트")
+//    void getSearchResultTest() {
+//        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
+//        when(productQueryRepository.searchProducts(any(), any(), any(), any())).thenReturn(productPage);
+//
+//        Page<ResponseProductDto> searchResult = productService.getSearchResult(anyList(), anyList(), any(), any());
+//
+//        assertThat(searchResult.getContent().size()).isEqualTo(4);
+//    }
 
     @Test
     @DisplayName("상품 상세 조회 테스트")

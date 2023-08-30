@@ -3,6 +3,8 @@ package com.maybezone.productservice.domain.product.repository;
 import com.maybezone.productservice.domain.product.entity.Product;
 import com.maybezone.productservice.domain.product.productenum.MainCategory;
 import com.maybezone.productservice.domain.product.productenum.SubCategory;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,36 +23,43 @@ import static com.maybezone.productservice.domain.product.entity.QProduct.*;
 public class ProductQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+    private final Long PAGE_SIZE = 20L;
 
-    public Page<Product> searchProducts(
+    public List<Product> findNoOffsetPageById(Long productId) {
+
+        return queryFactory
+                .selectFrom(product)
+                .where(ltProductId(productId))
+                .orderBy(product.id.desc())
+                .limit(PAGE_SIZE)
+                .fetch();
+    }
+
+    public List<Product> searchProducts(
             List<MainCategory> mainCategories,
             List<SubCategory> subCategories,
             String searchWord,
-            Pageable pageable
+            Long productId
     ) {
-        List<Product> products = queryFactory
+        return queryFactory
                 .selectFrom(product)
                 .where(
                         equalMainCategory(mainCategories),
                         equalSubCategory(subCategories),
                         equalSearchWord(searchWord)
                 )
+                .where(ltProductId(productId))
                 .orderBy(product.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(PAGE_SIZE)
                 .fetch();
+    }
 
-        JPAQuery<Long> countQuery = queryFactory
-                .select(product.count())
-                .from(product)
-                .where(
-                        equalMainCategory(mainCategories),
-                        equalSubCategory(subCategories),
-                        equalSearchWord(searchWord)
-                );
+    private BooleanExpression ltProductId(Long productId) {
+        if (productId == null) {
+            return null;
+        }
 
-        return PageableExecutionUtils.getPage(products, pageable, countQuery::fetchOne);
-
+        return product.id.lt(productId);
     }
 
     private BooleanExpression equalMainCategory(List<MainCategory> mainCategories) {
@@ -74,7 +83,7 @@ public class ProductQueryRepository {
             return null;
         }
 
-        return product.name.like("%" + searchWord + "%");
+        return product.name.like(searchWord + "%");
     }
 
 }
