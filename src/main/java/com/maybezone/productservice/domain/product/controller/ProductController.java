@@ -3,17 +3,10 @@ package com.maybezone.productservice.domain.product.controller;
 import com.maybezone.productservice.domain.product.dto.response.*;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +17,7 @@ public class ProductController {
 
     @GetMapping("/main")
     public ResponseEntity<ResponseProductPageDto> getNoOffsetMainPageProducts(@RequestParam(name = "lastproductid", required = false) Long productId) {
-        long startTime = System.currentTimeMillis();
         ResponseProductPageDto responseProductPageDto = productService.getNoOffsetMainPageProducts(productId);
-        log.info("query time={}s", (double) (System.currentTimeMillis() - startTime)/1000);
 
         return ResponseEntity.ok(responseProductPageDto);
     }
@@ -36,9 +27,7 @@ public class ProductController {
                                                                               @RequestParam(name = "subcategory", required = false) List<String> subCategories,
                                                                               @RequestParam(name = "searchword", required = false) String searchWord,
                                                                               @RequestParam(name = "lastproductid", required = false) Long productId) {
-        long startTime = System.currentTimeMillis();
         ResponseProductPageDto responseProductPageDto = productService.getSearchResult(mainCategories, subCategories, searchWord, productId);
-        log.info("query time={}s", (double) (System.currentTimeMillis() - startTime) / 1000);
 
         return ResponseEntity.ok(responseProductPageDto);
     }
