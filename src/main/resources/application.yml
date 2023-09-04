@@ -1,4 +1,12 @@
+server:
+  port: ${PORT}
+  servlet:
+    encoding:
+      force: true
+
 spring:
+  application:
+    name: product-server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
@@ -17,11 +25,37 @@ spring:
         default-page-size: 4
         one-indexed-parameters: true
 
-logging:
-  level:
-    org.hibernate.SQL: debug
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+  instance:
+    hostname: ${PRIVATE_IP}
+    instance-id: product-server
 
-server:
-  servlet:
-    encoding:
-      force: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_END_POINT}
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: b3
+      produce: b3_multi
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_BASE_URL}
+
+kafka:
+  topic:
+    stock: ${KAFKA_TOPIC_STOCK}
+  address: ${KAFKA_ADDRESS}
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},  %X{spanId:-}]"
+

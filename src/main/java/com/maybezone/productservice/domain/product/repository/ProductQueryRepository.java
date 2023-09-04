@@ -3,6 +3,8 @@ package com.maybezone.productservice.domain.product.repository;
 import com.maybezone.productservice.domain.product.entity.Product;
 import com.maybezone.productservice.domain.product.productenum.MainCategory;
 import com.maybezone.productservice.domain.product.productenum.SubCategory;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -76,10 +78,8 @@ public class ProductQueryRepository {
         if (searchWord == null || searchWord.isEmpty()) {
             return null;
         }
-
         BooleanExpression leftMatchCondition = product.name.like("%" + searchWord);
         BooleanExpression rightMatchCondition = product.name.like(searchWord + "%");
-
 
         return leftMatchCondition.or(rightMatchCondition);
     }
