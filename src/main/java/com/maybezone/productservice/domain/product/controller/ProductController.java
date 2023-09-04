@@ -1,23 +1,13 @@
 package com.maybezone.productservice.domain.product.controller;
 
-import com.maybezone.productservice.domain.product.dto.response.ResponseDataDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseStockDto;
+import com.maybezone.productservice.domain.product.dto.response.*;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.data.domain.Sort.Direction.*;
-
-@CrossOrigin("http://127.0.0.1:5500")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
@@ -26,22 +16,20 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/main")
-    public ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getMainPageProducts(Pageable pageable) {
-        Page<ResponseProductDto> responseProductDtos = productService.getMainPageProducts(pageable);
-        ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(responseProductDtos);
+    public ResponseEntity<ResponseProductPageDto> getNoOffsetMainPageProducts(@RequestParam(name = "lastproductid", required = false) Long productId) {
+        ResponseProductPageDto responseProductPageDto = productService.getNoOffsetMainPageProducts(productId);
 
-        return ResponseEntity.ok(responseDataDto);
+        return ResponseEntity.ok(responseProductPageDto);
     }
 
     @GetMapping
-    ResponseEntity<ResponseDataDto<Page<ResponseProductDto>>> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
-                                                                              @RequestParam(name = "subcategory", required = false) List<String> subCategories,
-                                                                              @RequestParam(name = "searchword", required = false) String searchWord,
-                                                                              @PageableDefault(sort = "id", direction = DESC, size = 4) Pageable pageable) {
-        Page<ResponseProductDto> searchResult = productService.getSearchResult(mainCategories, subCategories, searchWord, pageable);
-        ResponseDataDto<Page<ResponseProductDto>> responseDataDto = new ResponseDataDto<>(searchResult);
+    ResponseEntity<ResponseProductPageDto> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
+                                                           @RequestParam(name = "subcategory", required = false) List<String> subCategories,
+                                                           @RequestParam(name = "searchword", required = false) String searchWord,
+                                                           @RequestParam(name = "lastproductid", required = false) Long productId) {
+        ResponseProductPageDto responseProductPageDto = productService.getSearchResult(mainCategories, subCategories, searchWord, productId);
 
-        return ResponseEntity.ok(responseDataDto);
+        return ResponseEntity.ok(responseProductPageDto);
     }
 
     @GetMapping("/{productId}")
