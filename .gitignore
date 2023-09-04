@@ -38,5 +38,5 @@ out/
 
 .env
 .DS_Store
-db/data
-src/main/generated
+/db/data
+/src/main/generated

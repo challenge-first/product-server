@@ -9,9 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,6 @@ import static com.maybezone.productservice.domain.product.productenum.ProductTyp
 import static com.maybezone.productservice.domain.product.productenum.SubCategory.*;
 import static com.maybezone.productservice.domain.product.productenum.SubCategory.BACKPACKS;
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @SpringBootTest
 @Transactional
@@ -37,7 +33,7 @@ class ProductQueryRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        for (long i = 1; i <= 20; i++) {
+        for (long i = 1; i <= 30; i++) {
             if (i % 2 == 0) {
                 Product product = Product.builder()
                         .name("name" + i)
@@ -72,67 +68,62 @@ class ProductQueryRepositoryTest {
         }
     }
 
-//    @Test
-//    @DisplayName("조건 검색 테스트 - 조건 없음")
-//    void noSearchConditionProductsTest() {
-//        List<MainCategory> mainCategories = new ArrayList<>();
-//        List<SubCategory> subCategories = new ArrayList<>();
-//
-//        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-//        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
-//
-//        assertThat(products.getContent().size()).isEqualTo(4);
-//        assertThat(products.getContent().get(0).getMainCategory()).isEqualTo(ACCESSORIES);
-//        assertThat(products.getContent().get(1).getMainCategory()).isEqualTo(MENS_SHOES);
-//        assertThat(products.getContent().get(2).getMainCategory()).isEqualTo(ACCESSORIES);
-//        assertThat(products.getContent().get(3).getMainCategory()).isEqualTo(MENS_SHOES);
-//    }
+    @Test
+    @DisplayName("조건 검색 테스트 - 조건 없음")
+    void noSearchConditionProductsTest() {
+        List<MainCategory> mainCategories = new ArrayList<>();
+        List<SubCategory> subCategories = new ArrayList<>();
 
-//    @Test
-//    @DisplayName("조건 검색 테스트 - 메인 카테고리")
-//    void mainCategorySearchConditionProductsTest() {
-//        List<MainCategory> mainCategories = new ArrayList<>();
-//        mainCategories.add(MENS_SHOES);
-//        List<SubCategory> subCategories = new ArrayList<>();
-//
-//        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-//        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
-//
-//        assertThat(products.getContent().size()).isEqualTo(4);
-//        assertThat(products.getContent().get(0).getMainCategory()).isEqualTo(MENS_SHOES);
-//        assertThat(products.getContent().get(1).getMainCategory()).isEqualTo(MENS_SHOES);
-//        assertThat(products.getContent().get(2).getMainCategory()).isEqualTo(MENS_SHOES);
-//        assertThat(products.getContent().get(3).getMainCategory()).isEqualTo(MENS_SHOES);
-//    }
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, null, null);
 
-//    @Test
-//    @DisplayName("조건 검색 테스트 - 서브 카테고리")
-//    void subCategorySearchConditionProductsTest() {
-//        List<MainCategory> mainCategories = new ArrayList<>();
-//        List<SubCategory> subCategories = new ArrayList<>();
-//        subCategories.add(BACKPACKS);
-//
-//        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-//        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
-//
-//        assertThat(products.getContent().size()).isEqualTo(4);
-//        assertThat(products.getContent().get(0).getSubCategory()).isEqualTo(BACKPACKS);
-//        assertThat(products.getContent().get(1).getSubCategory()).isEqualTo(BACKPACKS);
-//        assertThat(products.getContent().get(2).getSubCategory()).isEqualTo(BACKPACKS);
-//        assertThat(products.getContent().get(3).getSubCategory()).isEqualTo(BACKPACKS);
-//    }
+        assertThat(products.size()).isEqualTo(20);
+        assertThat(products.get(0).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.get(1).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(2).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.get(3).getMainCategory()).isEqualTo(MENS_SHOES);
+    }
 
-//    @Test
-//    @DisplayName("조건 검색 테스트 - 검색어")
-//    void searchWordConditionProductsTest() {
-//        List<MainCategory> mainCategories = new ArrayList<>();
-//        List<SubCategory> subCategories = new ArrayList<>();
-//
-//        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-//        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "10", pageable);
-//
-//        assertThat(products.getContent().size()).isEqualTo(1);
-//        assertThat(products.getContent().get(0).getName()).isEqualTo("name10");
-//    }
+    @Test
+    @DisplayName("조건 검색 테스트 - 메인 카테고리")
+    void mainCategorySearchConditionProductsTest() {
+        List<MainCategory> mainCategories = new ArrayList<>();
+        mainCategories.add(MENS_SHOES);
+        List<SubCategory> subCategories = new ArrayList<>();
+
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, null, null);
+
+        assertThat(products.size()).isEqualTo(15);
+        assertThat(products.get(0).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(1).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(2).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(3).getMainCategory()).isEqualTo(MENS_SHOES);
+    }
+
+    @Test
+    @DisplayName("조건 검색 테스트 - 서브 카테고리")
+    void subCategorySearchConditionProductsTest() {
+        List<MainCategory> mainCategories = new ArrayList<>();
+        List<SubCategory> subCategories = new ArrayList<>();
+        subCategories.add(BACKPACKS);
+
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, null, null);
+
+        assertThat(products.size()).isEqualTo(15);
+        assertThat(products.get(0).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.get(1).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.get(2).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.get(3).getSubCategory()).isEqualTo(BACKPACKS);
+    }
+
+    @Test
+    @DisplayName("조건 검색 테스트 - 검색어")
+    void searchWordConditionProductsTest() {
+        List<MainCategory> mainCategories = new ArrayList<>();
+        List<SubCategory> subCategories = new ArrayList<>();
+
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "name", null);
+
+        assertThat(products.size()).isEqualTo(20);
+    }
 
 }

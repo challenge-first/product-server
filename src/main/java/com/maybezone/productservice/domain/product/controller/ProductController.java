@@ -24,9 +24,9 @@ public class ProductController {
 
     @GetMapping
     ResponseEntity<ResponseProductPageDto> getSearchResult(@RequestParam(name = "maincategory", required = false) List<String> mainCategories,
-                                                                              @RequestParam(name = "subcategory", required = false) List<String> subCategories,
-                                                                              @RequestParam(name = "searchword", required = false) String searchWord,
-                                                                              @RequestParam(name = "lastproductid", required = false) Long productId) {
+                                                           @RequestParam(name = "subcategory", required = false) List<String> subCategories,
+                                                           @RequestParam(name = "searchword", required = false) String searchWord,
+                                                           @RequestParam(name = "lastproductid", required = false) Long productId) {
         ResponseProductPageDto responseProductPageDto = productService.getSearchResult(mainCategories, subCategories, searchWord, productId);
 
         return ResponseEntity.ok(responseProductPageDto);

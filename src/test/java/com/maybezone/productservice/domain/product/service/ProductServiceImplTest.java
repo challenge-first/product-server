@@ -1,7 +1,7 @@
 package com.maybezone.productservice.domain.product.service;
 
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
+import com.maybezone.productservice.domain.product.dto.response.ResponseProductPageDto;
 import com.maybezone.productservice.domain.product.entity.Product;
 import com.maybezone.productservice.domain.product.repository.ProductQueryRepository;
 import com.maybezone.productservice.domain.product.repository.ProductRepository;
@@ -12,9 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +29,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 
-    @Mock
-    private Pageable pageable;
-
     private List<Product> productList = new ArrayList<>();
 
     @Mock
@@ -48,7 +42,7 @@ class ProductServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
-        for (long i = 4; i > 0; i--) {
+        for (long i = 20; i > 0; i--) {
             Product product = Product.builder()
                     .name("name" + i)
                     .price(i)
@@ -65,29 +59,26 @@ class ProductServiceImplTest {
         }
     }
 
-//    @Test
-//    @DisplayName("메인 페이지 상품 전체조회 테스트")
-//    void getMainPageProductsTest() {
-//        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
-//        when(productRepository.findTop4ByOrderByIdDesc(pageable))
-//                .thenReturn(productPage);
-//
-//        Page<ResponseProductDto> findResponseProductDtos = productService.getMainPageProducts(pageable);
-//
-//        assertThat(findResponseProductDtos.getTotalPages()).isEqualTo(1);
-//        assertThat(findResponseProductDtos.getTotalElements()).isEqualTo(4);
-//    }
+    @Test
+    @DisplayName("메인 페이지 상품 전체조회 테스트")
+    void getMainPageProductsTest() {
+        when(productQueryRepository.findNoOffsetPageById(null))
+                .thenReturn(productList);
 
-//    @Test
-//    @DisplayName("조건 검색 테스트")
-//    void getSearchResultTest() {
-//        PageImpl<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
-//        when(productQueryRepository.searchProducts(any(), any(), any(), any())).thenReturn(productPage);
-//
-//        Page<ResponseProductDto> searchResult = productService.getSearchResult(anyList(), anyList(), any(), any());
-//
-//        assertThat(searchResult.getContent().size()).isEqualTo(4);
-//    }
+        ResponseProductPageDto responseProductPageDto = productService.getNoOffsetMainPageProducts(null);
+
+        assertThat(responseProductPageDto.getData().size()).isEqualTo(20);
+    }
+
+    @Test
+    @DisplayName("조건 검색 테스트")
+    void getSearchResultTest() {
+        when(productQueryRepository.searchProducts(any(), any(), any(), any())).thenReturn(productList);
+
+        ResponseProductPageDto searchResult = productService.getSearchResult(anyList(), anyList(), any(), any());
+
+        assertThat(searchResult.getData().size()).isEqualTo(20);
+    }
 
     @Test
     @DisplayName("상품 상세 조회 테스트")

@@ -9,8 +9,6 @@ import com.maybezone.productservice.domain.product.productenum.SubCategory;
 import com.maybezone.productservice.domain.product.repository.ProductQueryRepository;
 import com.maybezone.productservice.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

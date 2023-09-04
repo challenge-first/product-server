@@ -1,10 +1,7 @@
 package com.maybezone.productservice.domain.product.service;
 
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
-import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductPageDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
