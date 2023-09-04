@@ -9,9 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,6 @@ import static com.maybezone.productservice.domain.product.productenum.ProductTyp
 import static com.maybezone.productservice.domain.product.productenum.SubCategory.*;
 import static com.maybezone.productservice.domain.product.productenum.SubCategory.BACKPACKS;
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @SpringBootTest
 @Transactional
@@ -37,7 +33,7 @@ class ProductQueryRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        for (long i = 1; i <= 20; i++) {
+        for (long i = 1; i <= 30; i++) {
             if (i % 2 == 0) {
                 Product product = Product.builder()
                         .name("name" + i)
@@ -78,14 +74,13 @@ class ProductQueryRepositoryTest {
         List<MainCategory> mainCategories = new ArrayList<>();
         List<SubCategory> subCategories = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, null, null);
 
-        assertThat(products.getContent().size()).isEqualTo(4);
-        assertThat(products.getContent().get(0).getMainCategory()).isEqualTo(ACCESSORIES);
-        assertThat(products.getContent().get(1).getMainCategory()).isEqualTo(MENS_SHOES);
-        assertThat(products.getContent().get(2).getMainCategory()).isEqualTo(ACCESSORIES);
-        assertThat(products.getContent().get(3).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.size()).isEqualTo(20);
+        assertThat(products.get(0).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.get(1).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(2).getMainCategory()).isEqualTo(ACCESSORIES);
+        assertThat(products.get(3).getMainCategory()).isEqualTo(MENS_SHOES);
     }
 
     @Test
@@ -95,14 +90,13 @@ class ProductQueryRepositoryTest {
         mainCategories.add(MENS_SHOES);
         List<SubCategory> subCategories = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, null, null);
 
-        assertThat(products.getContent().size()).isEqualTo(4);
-        assertThat(products.getContent().get(0).getMainCategory()).isEqualTo(MENS_SHOES);
-        assertThat(products.getContent().get(1).getMainCategory()).isEqualTo(MENS_SHOES);
-        assertThat(products.getContent().get(2).getMainCategory()).isEqualTo(MENS_SHOES);
-        assertThat(products.getContent().get(3).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.size()).isEqualTo(15);
+        assertThat(products.get(0).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(1).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(2).getMainCategory()).isEqualTo(MENS_SHOES);
+        assertThat(products.get(3).getMainCategory()).isEqualTo(MENS_SHOES);
     }
 
     @Test
@@ -112,14 +106,13 @@ class ProductQueryRepositoryTest {
         List<SubCategory> subCategories = new ArrayList<>();
         subCategories.add(BACKPACKS);
 
-        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "", pageable);
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, null, null);
 
-        assertThat(products.getContent().size()).isEqualTo(4);
-        assertThat(products.getContent().get(0).getSubCategory()).isEqualTo(BACKPACKS);
-        assertThat(products.getContent().get(1).getSubCategory()).isEqualTo(BACKPACKS);
-        assertThat(products.getContent().get(2).getSubCategory()).isEqualTo(BACKPACKS);
-        assertThat(products.getContent().get(3).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.size()).isEqualTo(15);
+        assertThat(products.get(0).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.get(1).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.get(2).getSubCategory()).isEqualTo(BACKPACKS);
+        assertThat(products.get(3).getSubCategory()).isEqualTo(BACKPACKS);
     }
 
     @Test
@@ -128,11 +121,9 @@ class ProductQueryRepositoryTest {
         List<MainCategory> mainCategories = new ArrayList<>();
         List<SubCategory> subCategories = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(0, 4, DESC, "id");
-        Page<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "10", pageable);
+        List<Product> products = productQueryRepository.searchProducts(mainCategories, subCategories, "name", null);
 
-        assertThat(products.getContent().size()).isEqualTo(1);
-        assertThat(products.getContent().get(0).getName()).isEqualTo("name10");
+        assertThat(products.size()).isEqualTo(20);
     }
 
 }

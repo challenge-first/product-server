@@ -2,6 +2,7 @@ package com.maybezone.productservice.domain.product.controller;
 
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDetailDto;
 import com.maybezone.productservice.domain.product.dto.response.ResponseProductDto;
+import com.maybezone.productservice.domain.product.dto.response.ResponseProductPageDto;
 import com.maybezone.productservice.domain.product.service.ProductService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
-import static org.springframework.data.domain.Sort.Direction.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,7 +40,7 @@ class ProductControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        for (int i = 4; i > 0; i--) {
+        for (int i = 20; i > 0; i--) {
             ResponseProductDto responseProductDto = ResponseProductDto.builder().build();
             responseProductDtos.add(responseProductDto);
         }
@@ -51,30 +49,32 @@ class ProductControllerTest {
     @Test
     @DisplayName("메인 페이지 상품 전체 조회 테스트")
     void getMainPageProductsTest() throws Exception {
-        PageRequest pageable = PageRequest.of(0, 4, DESC, "id");
-        PageImpl<ResponseProductDto> responseProductDtosPage = new PageImpl<>(responseProductDtos, pageable, responseProductDtos.size());
+        ResponseProductPageDto responseProductPageDto = ResponseProductPageDto.builder()
+                .data(responseProductDtos)
+                .lastProductId(1L)
+                .build();
 
-        when(productService.getMainPageProducts(any()))
-                .thenReturn(responseProductDtosPage);
+        when(productService.getNoOffsetMainPageProducts(any()))
+                .thenReturn(responseProductPageDto);
 
         mockMvc.perform(get("/products/main"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("data").exists())
-                .andExpect(jsonPath("data.content").exists())
-                .andExpect(jsonPath("data.content").isArray())
-                .andExpect(jsonPath("data.content.length()").value(4));
+                .andExpect(jsonPath("data").isArray())
+                .andExpect(jsonPath("data.length()").value(20));
     }
 
     @Test
     @DisplayName("조건 검색 테스트")
     void getSearchResultTest() throws Exception {
-        PageRequest pageable = PageRequest.of(0, 4, DESC, "id");
-        PageImpl<ResponseProductDto> responseProductDtosPage = new PageImpl<>(responseProductDtos, pageable, responseProductDtos.size());
-
+        ResponseProductPageDto responseProductPageDto = ResponseProductPageDto.builder()
+                .data(responseProductDtos)
+                .lastProductId(1L)
+                .build();
         when(productService.getSearchResult(anyList(), anyList(), any(), any()))
-                .thenReturn(responseProductDtosPage);
+                .thenReturn(responseProductPageDto);
 
         mockMvc.perform(get("/products?maincategory=ACCESSORIES&subcategory=BACKPACKS&searchword=search"))
                 .andDo(print())
