@@ -8,6 +8,7 @@ import com.maybezone.productservice.domain.product.productenum.MainCategory;
 import com.maybezone.productservice.domain.product.productenum.SubCategory;
 import com.maybezone.productservice.domain.product.repository.ProductQueryRepository;
 import com.maybezone.productservice.domain.product.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -104,9 +105,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateStockCount(Long productId) {
+    @Transactional
+    public synchronized void updateStockCount(Long productId) {
         Product findProduct = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
 
         findProduct.updateStockCount();
+
+        productRepository.saveAndFlush(findProduct);
     }
 }

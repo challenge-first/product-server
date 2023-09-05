@@ -64,6 +64,6 @@ public class Product {
             throw new IllegalStateException("상품의 재고가 부족합니다");
         }
 
-        return this.stockCount--;
+        return --this.stockCount;
     }
 }
